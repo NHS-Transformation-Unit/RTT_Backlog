@@ -3,6 +3,7 @@ packages <- c("here",
               "readxl",
               "leaflet",
               "markdown",
-              "knitr")
+              "knitr",
+              "scales")
 
 lapply(packages, library, character.only=TRUE)
