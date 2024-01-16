@@ -14,3 +14,9 @@ theme_tu_standard <- function(hex_col, hex_text = "#ffffff") {
   )
   
 }
+
+
+
+# selected_theme ----------------------------------------------------------
+
+selected_theme <- theme_tu_standard
