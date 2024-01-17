@@ -35,7 +35,7 @@ rtt_tfc_total_comp <- rtt_tfc_total_chart_df %>%
   mutate(Change = (Latest/`Pre-COVID`) - 1) %>%
   arrange(desc(Change))
 
-ggplot(rtt_tfc_total_comp, aes(x = reorder(Treatment_Function_Desc, - Change), y = Change)) +
+rtt_tfc_total_change_chart <- ggplot(rtt_tfc_total_comp, aes(x = reorder(Treatment_Function_Desc, - Change), y = Change)) +
   geom_bar(stat = "identity", fill = "#40C1AC") +
   geom_text(aes(label = round(Change * 100, 1)), hjust = 1.1, col = "#000000") +
   scale_y_continuous(label = percent) +

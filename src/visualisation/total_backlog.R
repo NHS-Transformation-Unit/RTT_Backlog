@@ -74,7 +74,7 @@ rtt_weeks <- ggplot(rtt_total_quantiles_summary, aes(x = as.Date(Effective_Snaps
   geom_line(aes(y = Percentile_50, col = "Median Waiting Time"), linewidth = 0.8, show.legend = TRUE) + 
   scale_color_manual("", values = "black")
 
-rtt_weeks <- ggplot(rtt_total_quantiles_summary, aes(x = as.Date(Effective_Snapshot_Date))) +
+rtt_total_weeks_chart <- ggplot(rtt_total_quantiles_summary, aes(x = as.Date(Effective_Snapshot_Date))) +
   geom_ribbon(aes(ymin = Percentile_10, ymax = Percentile_90, fill = "10th - 90th Percentile Range"), col = "#ffffff", alpha = 0.5)+
   geom_ribbon(aes(ymin = Percentile_25, ymax = Percentile_75, fill = "Interquartile Range"), col = "#ffffff", alpha = 0.5)+
   geom_line(aes(y = Percentile_50, col = "Median Waiting Time"), linewidth = 0.8) + 
@@ -94,4 +94,4 @@ rtt_weeks <- ggplot(rtt_total_quantiles_summary, aes(x = as.Date(Effective_Snaps
        subtitle = "All England") +
   selected_theme(hex_col = "#40C1AC")
 
-rtt_weeks
+rtt_total_weeks_chart
