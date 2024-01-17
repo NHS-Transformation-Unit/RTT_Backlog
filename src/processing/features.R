@@ -159,3 +159,39 @@ rtt_total_quantiles_region_summary <- rtt_total_quantiles_region_P10 %>%
 
 rtt_total_quantiles_region_summary_long <- rtt_total_quantiles_region_summary %>%
   gather(Metric, Week, -c(1:2))
+
+
+# Long Waiters Percentages ------------------------------------------------
+
+rtt_total_long_waiters <- rtt_total_weeks %>%
+  mutate(Flag_52 = case_when(weeks_int >= 52 ~ Incomplete_Pathways,
+                             TRUE ~ 0),
+         Flag_65 = case_when(weeks_int >= 65 ~ Incomplete_Pathways,
+                             TRUE ~0),
+         Flag_78 = case_when(weeks_int >= 78 ~ Incomplete_Pathways,
+                             TRUE ~ 0),
+         Flag_104 = case_when(weeks_int >= 104 ~ Incomplete_Pathways,
+                              TRUE ~ 0)
+  ) %>%
+  group_by(Effective_Snapshot_Date) %>%
+  summarise(Incomplete_Pathways = sum(Incomplete_Pathways, na.rm = TRUE),
+            Flag_52 = sum(Flag_52, na.rm = TRUE),
+            Flag_65 = sum(Flag_65, na.rm = TRUE),
+            Flag_78 = sum(Flag_78, na.rm = TRUE),
+            Flag_104 = sum(Flag_104, na.rm = TRUE)) %>%
+  mutate(Flag_52_Prop = Flag_52/Incomplete_Pathways,
+         Flag_65_Prop = Flag_65/Incomplete_Pathways,
+         Flag_78_Prop = Flag_78/Incomplete_Pathways,
+         Flag_104_Prop = Flag_104/Incomplete_Pathways) %>%
+  gather(Metric, Value, -c(1)) %>%
+  filter(Metric != "Incomplete_Pathways") %>%
+  mutate(Type = case_when(str_detect(Metric, "Prop") ~ "Prop",
+                          TRUE ~ "Count")) %>%
+  mutate(Group = case_when(str_detect(Metric, "52") ~ "52+",
+                           str_detect(Metric, "65") ~ "65+",
+                           str_detect(Metric, "78") ~ "78+",
+                           str_detect(Metric, "104") ~ "104+")) %>%
+  select(-c(Metric)) %>%
+  spread(Type, Value) %>%
+  mutate(Group = factor(Group, levels = c("52+", "65+", "78+", "104+"))) %>%
+  arrange(Effective_Snapshot_Date, Group)
