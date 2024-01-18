@@ -195,3 +195,11 @@ rtt_total_long_waiters <- rtt_total_weeks %>%
   spread(Type, Value) %>%
   mutate(Group = factor(Group, levels = c("52+", "65+", "78+", "104+"))) %>%
   arrange(Effective_Snapshot_Date, Group)
+
+# Waiting List Shape ------------------------------------------------------
+
+rtt_wls <- rtt_total_weeks %>%
+  filter(Effective_Snapshot_Date == "2020-02-29" | Effective_Snapshot_Date == max(Effective_Snapshot_Date)) %>%
+  group_by(Effective_Snapshot_Date, weeks_int) %>%
+  summarise(Incomplete_Pathways = sum(Incomplete_Pathways, na.rm = TRUE)) %>%
+  mutate(Incomplete_Pathways_Prop = Incomplete_Pathways/sum(Incomplete_Pathways))
