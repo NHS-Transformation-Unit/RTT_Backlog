@@ -35,4 +35,4 @@ palette_tu <- c("#40C1AC",
 
 # Select palette ----------------------------------------------------------
 
-palette_region <- palette_tol
+palette_region <- palette_tol_regions
