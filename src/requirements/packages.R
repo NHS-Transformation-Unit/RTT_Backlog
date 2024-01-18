@@ -4,6 +4,7 @@ packages <- c("here",
               "leaflet",
               "markdown",
               "knitr",
-              "scales")
+              "scales",
+              "ggrepel")
 
 lapply(packages, library, character.only=TRUE)
