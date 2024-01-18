@@ -28,7 +28,7 @@ rtt_total_chart <-
        caption = "Source: Monthly RTT Published Data",
        title = "Total Incomplete Pathways",
        subtitle = "All England") +
-  selected_theme(hex_col = palette_tu[4])
+  selected_theme(hex_col = palette_tu[1])
 
 rtt_total_chart
 
@@ -58,8 +58,8 @@ rtt_total_region_chart <-
        y = "Incomplete Pathways",
        caption = "Source: Monthly RTT Published Data",
        title = "Total Incomplete Pathways",
-       subtitle = "All England") +
-  selected_theme(hex_col = palette_tu[4])
+       subtitle = "NHS England Regions") +
+  selected_theme(hex_col = palette_tu[1])
 
 rtt_total_region_chart
 
@@ -93,6 +93,68 @@ rtt_total_weeks_chart <- ggplot(rtt_total_quantiles_summary, aes(x = as.Date(Eff
        caption = "Source: Monthly RTT Published Data",
        title = "Summary of Weeks Waiting at Month End - Incomplete RTT Pathways",
        subtitle = "All England") +
-  selected_theme(hex_col = palette_tu[4])
+  selected_theme(hex_col = palette_tu[1])
 
 rtt_total_weeks_chart
+
+
+# Waiting List Shape ------------------------------------------------------
+
+rtt_waiting_list_shape_chart <- ggplot(rtt_wls, aes(x = weeks_int, y = Incomplete_Pathways, fill = factor(Effective_Snapshot_Date))) +
+  geom_area(stat = "identity", position = "identity", col = "white") +
+  facet_wrap(~(format(Effective_Snapshot_Date, "%B %Y"))) +
+  scale_fill_manual(values = c(palette_wong_regions[1], palette_wong_regions[5]), name = "Month Ending") +
+  scale_y_continuous(label = comma, expand = c(0,0)) +
+  geom_vline(xintercept = 18, linetype = "dashed") +
+  annotate(geom = "text",
+           x = 20,
+           y = 0.8 * max(rtt_wls$Incomplete_Pathways),
+           label = "18 Weeks",
+           hjust = -0.1) +
+  labs(x = "Weeks Waiting",
+       y = "Incomplete Pathways",
+       caption = "Source: Monthly RTT Published Data",
+       title = "Shape of RTT Incomplete Waiting List at Month End - Pre-Pandemic and Latest Month",
+       subtitle = "All England") +
+  selected_theme(hex_col = palette_tu[1])
+
+rtt_waiting_list_shape_chart
+
+rtt_waiting_list_shape_prop_chart <- ggplot(rtt_wls, aes(x = weeks_int, y = Incomplete_Pathways_Prop, fill = factor(Effective_Snapshot_Date))) +
+  geom_area(stat = "identity", position = "identity", col = "white") +
+  facet_wrap(~(format(Effective_Snapshot_Date, "%B %Y"))) +
+  scale_fill_manual(values = c(palette_wong_regions[1], palette_wong_regions[5]), name = "Month Ending") +
+  scale_y_continuous(label = percent, expand = c(0,0)) +
+  geom_vline(xintercept = 18, linetype = "dashed") +
+  annotate(geom = "text",
+           x = 20,
+           y = 0.8 * max(rtt_wls$Incomplete_Pathways_Prop),
+           label = "18 Weeks",
+           hjust = -0.1) +
+  labs(x = "Weeks Waiting",
+       y = "Percentage of Incomplete Pathways",
+       caption = "Source: Monthly RTT Published Data",
+       title = "Shape of RTT Incomplete Waiting List at Month End - Pre-Pandemic and Latest Month",
+       subtitle = "All England") +
+  selected_theme(hex_col = palette_tu[1])
+
+rtt_waiting_list_shape_prop_chart
+
+rtt_waiting_list_shape_prop_overlap_chart <- ggplot(rtt_wls, aes(x = weeks_int, y = Incomplete_Pathways_Prop, fill = factor(Effective_Snapshot_Date))) +
+  geom_area(stat = "identity", position = "identity", col = "white", alpha = 0.5) +
+  scale_fill_manual(values = c(palette_wong_regions[1], palette_wong_regions[5]), name = "Month Ending") +
+  scale_y_continuous(label = percent, expand = c(0,0)) +
+  geom_vline(xintercept = 18, linetype = "dashed") +
+  annotate(geom = "text",
+           x = 20,
+           y = 0.8 * max(rtt_wls$Incomplete_Pathways_Prop),
+           label = "18 Weeks",
+           hjust = -0.1) +
+  labs(x = "Weeks Waiting",
+       y = "Percentage of Incomplete Pathways",
+       caption = "Source: Monthly RTT Published Data",
+       title = "Shape of RTT Incomplete Waiting List at Month End - Pre-Pandemic and Latest Month",
+       subtitle = "All England") +
+  selected_theme(hex_col = palette_tu[1])
+
+rtt_waiting_list_shape_prop_overlap_chart
