@@ -2,7 +2,8 @@
 # tu_theme_standard -------------------------------------------------------
 
 theme_tu_standard <- function(hex_col, hex_text = "#ffffff") {
-  theme(strip.background = element_rect(fill = hex_col),
+  theme(text = element_text(family = "Franklin Gothic Book"),
+        strip.background = element_rect(fill = hex_col),
         strip.text = element_text(colour = hex_text, size = 10),
         axis.text = element_text(size = 10),
         axis.text.x = element_text(angle = 45, hjust = 1),
@@ -18,7 +19,8 @@ theme_tu_standard <- function(hex_col, hex_text = "#ffffff") {
 # TU Theme White Background -----------------------------------------------
 
 theme_tu_white <- function(hex_col, hex_text = "#ffffff") {
-  theme(strip.background = element_rect(fill = hex_col),
+  theme(text = element_text(family = "Franklin Gothic Book"),
+        strip.background = element_rect(fill = hex_col),
         strip.text = element_text(colour = hex_text, size = 10),
         axis.text = element_text(size = 10),
         axis.text.x = element_text(angle = 45, hjust = 1),
