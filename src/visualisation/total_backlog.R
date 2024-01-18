@@ -79,7 +79,7 @@ rtt_total_weeks_chart <- ggplot(rtt_total_quantiles_summary, aes(x = as.Date(Eff
   geom_label_repel(data = rtt_total_quantiles_summary_latest, aes(label = Percentile_10, y = Percentile_10), nudge_x = 200, show.legend = FALSE, col = palette_wong_regions[2]) +
   geom_label_repel(data = rtt_total_quantiles_summary_latest, aes(label = Percentile_25, y = Percentile_25), nudge_x = 200, show.legend = FALSE, col = palette_wong_regions[5]) +
   geom_label_repel(data = rtt_total_quantiles_summary_latest, aes(label = Percentile_75, y = Percentile_75), nudge_x = 200, show.legend = FALSE, col = palette_wong_regions[5]) +
-  geom_label_repel(data = rtt_total_quantiles_summary_latest, aes(label = Percentile_90, y = Percentile_90), nudge_x = 200, show.legend = FALSE, col = palette_wong_regions[5]) +
+  geom_label_repel(data = rtt_total_quantiles_summary_latest, aes(label = Percentile_90, y = Percentile_90), nudge_x = 200, show.legend = FALSE, col = palette_wong_regions[2]) +
   scale_x_date(date_breaks = c("12 months"), date_labels = "%b - %y") +
   scale_y_continuous(expand = c(0,0)) + 
   geom_hline(yintercept = 18, linetype = "dashed") +
