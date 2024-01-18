@@ -105,6 +105,7 @@ rtt_waiting_list_shape_chart <- ggplot(rtt_wls, aes(x = weeks_int, y = Incomplet
   facet_wrap(~(format(Effective_Snapshot_Date, "%B %Y"))) +
   scale_fill_manual(values = c(palette_wong_regions[1], palette_wong_regions[5]), name = "Month Ending") +
   scale_y_continuous(label = comma, expand = c(0,0)) +
+  scale_x_continuous(label = comma, expand = c(0,0)) +
   geom_vline(xintercept = 18, linetype = "dashed") +
   annotate(geom = "text",
            x = 20,
@@ -125,6 +126,7 @@ rtt_waiting_list_shape_prop_chart <- ggplot(rtt_wls, aes(x = weeks_int, y = Inco
   facet_wrap(~(format(Effective_Snapshot_Date, "%B %Y"))) +
   scale_fill_manual(values = c(palette_wong_regions[1], palette_wong_regions[5]), name = "Month Ending") +
   scale_y_continuous(label = percent, expand = c(0,0)) +
+  scale_x_continuous(label = comma, expand = c(0,0)) +
   geom_vline(xintercept = 18, linetype = "dashed") +
   annotate(geom = "text",
            x = 20,
