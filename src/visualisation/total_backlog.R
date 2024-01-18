@@ -144,6 +144,7 @@ rtt_waiting_list_shape_prop_overlap_chart <- ggplot(rtt_wls, aes(x = weeks_int, 
   geom_area(stat = "identity", position = "identity", col = "white", alpha = 0.5) +
   scale_fill_manual(values = c(palette_wong_regions[1], palette_wong_regions[5]), name = "Month Ending") +
   scale_y_continuous(label = percent, expand = c(0,0)) +
+  scale_x_continuous(label = comma, expand = c(0,0)) +
   geom_vline(xintercept = 18, linetype = "dashed") +
   annotate(geom = "text",
            x = 20,
