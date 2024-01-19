@@ -161,3 +161,38 @@ rtt_waiting_list_shape_prop_overlap_chart <- ggplot(rtt_wls, aes(x = weeks_int, 
   selected_theme(hex_col = palette_tu[1])
 
 rtt_waiting_list_shape_prop_overlap_chart
+
+
+# Waiting List Shape Animations -------------------------------------------
+
+rtt_wls_counts_animation <- ggplot(data = rtt_wls_animate, aes (x = weeks_int, y = Incomplete_Pathways))+
+  geom_area(fill = palette_tu[4], alpha = 0.5, col = palette_tu[4]) +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(labels = comma, expand = c(0,0)) +
+  labs(x = "Weeks Waiting",
+       y = "Incomplete Pathways",
+       caption = "Source: Monthly RTT Published Data",
+       title = "Shape of RTT Incomplete Waiting List",
+       subtitle = "All England - Month Ending: {closest_state}") +
+  selected_theme(hex_col = palette_tu[1]) +
+  transition_states(Effective_Snapshot_Date, transition_length = 5, state_length = 15, wrap = TRUE) +
+  enter_fade() +
+  exit_fade()
+
+rtt_wls_counts_animation
+
+rtt_wls_prop_animation <- ggplot(data = rtt_wls_animate, aes (x = weeks_int, y = Incomplete_Pathways_Prop))+
+  geom_area(fill = palette_tu[4], alpha = 0.5, col = palette_tu[4]) +
+  scale_x_continuous(expand = c(0,0)) +
+  scale_y_continuous(labels = percent, expand = c(0,0)) +
+  labs(x = "Weeks Waiting",
+       y = "Percentage of Total Incomplete Pathways",
+       caption = "Source: Monthly RTT Published Data",
+       title = "Shape of RTT Incomplete Waiting List",
+       subtitle = "All England - Month Ending: {closest_state}") +
+  selected_theme(hex_col = palette_tu[1]) +
+  transition_states(Effective_Snapshot_Date, transition_length = 5, state_length = 15, wrap = TRUE) +
+  enter_fade() +
+  exit_fade()
+
+rtt_wls_prop_animation
