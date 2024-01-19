@@ -203,3 +203,9 @@ rtt_wls <- rtt_total_weeks %>%
   group_by(Effective_Snapshot_Date, weeks_int) %>%
   summarise(Incomplete_Pathways = sum(Incomplete_Pathways, na.rm = TRUE)) %>%
   mutate(Incomplete_Pathways_Prop = Incomplete_Pathways/sum(Incomplete_Pathways))
+
+rtt_wls_animate <- rtt_total_weeks %>%
+  filter(Effective_Snapshot_Date >= "2020-02-29") %>%
+  group_by(Effective_Snapshot_Date, weeks_int) %>%
+  summarise(Incomplete_Pathways = sum(Incomplete_Pathways, na.rm = TRUE)) %>%
+  mutate(Incomplete_Pathways_Prop = Incomplete_Pathways/sum(Incomplete_Pathways))
