@@ -11,7 +11,7 @@ theme_tu_standard <- function(hex_col, hex_text = "#ffffff") {
         plot.title = element_text(size = 16, color = hex_col),
         plot.subtitle = element_text(size = 12),
         legend.position = "bottom",
-        legend.text = element_text(size = 10)
+        legend.text = element_text(size = 8)
   )
   
 }
@@ -32,7 +32,7 @@ theme_tu_white <- function(hex_col, hex_text = "#ffffff") {
         panel.grid.minor.y = element_blank(),
         axis.line = element_line(color = "#000000"),
         legend.position = "bottom",
-        legend.text = element_text(size = 10)
+        legend.text = element_text(size = 8)
   )
   
 }
