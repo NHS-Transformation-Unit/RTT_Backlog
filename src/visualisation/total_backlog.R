@@ -14,8 +14,8 @@ rtt_total_chart <-
   ggplot(data = rtt_total_chart_df, aes(x = as.Date(Effective_Snapshot_Date), y = Incomplete_Pathways)) +
   geom_line(col = palette_tu[4], linewidth = 1.2) +
   geom_point(data = rtt_total_chart_df_latest, col = palette_tu[4], size = 2) +
-  geom_label_repel(data = rtt_total_chart_df_latest, aes(label = comma(Incomplete_Pathways)), nudge_x = 300) +
-  scale_x_date(date_breaks = c("6 months"), date_labels = "%b - %y") +
+  geom_label_repel(data = rtt_total_chart_df_latest, aes(label = comma(Incomplete_Pathways)), nudge_x = 600, nudge_y = - 500000) +
+  scale_x_date(breaks = seq(as.Date("2011-04-01"), as.Date("2024-04-01"), by = "1 year"), date_labels = "%b - %y", expand = c(0,0)) +
   scale_y_continuous(labels = comma) +
   geom_vline(xintercept = as.Date("2020-03-01"), linetype = "dashed") +
   annotate(geom = "label",
@@ -45,8 +45,8 @@ rtt_total_region_chart <-
   geom_line() +
   scale_color_manual(values = palette_region, name = "Region") +
   geom_point(data = rtt_total_region_chart_df_latest, size = 2, show.legend = FALSE) +
-  geom_label_repel(data = rtt_total_region_chart_df_latest, aes(label = comma(Incomplete_Pathways)), nudge_x = 365, show.legend = FALSE) +
-  scale_x_date(date_breaks = c("12 months"), date_labels = "%b - %y") +
+  geom_label_repel(data = rtt_total_region_chart_df_latest, aes(label = comma(Incomplete_Pathways)), nudge_x = 600, show.legend = FALSE, size = 3) +
+  scale_x_date(breaks = seq(as.Date("2011-04-01"), as.Date("2024-04-01"), by = "1 year"), date_labels = "%b - %y", expand = c(0,0)) +
   scale_y_continuous(labels = comma, breaks = c(seq(0, 1500000, by = 250000))) +
   geom_vline(xintercept = as.Date("2020-03-01"), linetype = "dashed") +
   annotate(geom = "label",
@@ -69,8 +69,8 @@ rtt_total_quantiles_summary_latest <- rtt_total_quantiles_summary %>%
   filter(Effective_Snapshot_Date == rtt_total_max_date)
 
 rtt_total_weeks_chart <- ggplot(rtt_total_quantiles_summary, aes(x = as.Date(Effective_Snapshot_Date))) +
-  geom_ribbon(aes(ymin = Percentile_10, ymax = Percentile_90, fill = "10th - 90th Percentile Range"), col = "#ffffff", alpha = 0.5)+
-  geom_ribbon(aes(ymin = Percentile_25, ymax = Percentile_75, fill = "Interquartile Range"), col = "#ffffff", alpha = 0.5)+
+  geom_ribbon(aes(ymin = Percentile_10, ymax = Percentile_90, fill = "10th - 90th Percentile Range"), col = "#ffffff", alpha = 0.5, linewidth = 0.2)+
+  geom_ribbon(aes(ymin = Percentile_25, ymax = Percentile_75, fill = "Interquartile Range"), col = "#ffffff", alpha = 0.5, linewidth = 0.2)+
   geom_line(aes(y = Percentile_50, col = "Median Waiting Time"), linewidth = 1.2) + 
   scale_color_manual("", values = "black") +
   scale_fill_manual("", values = c(palette_wong_regions[2], palette_wong_regions[5])) +
@@ -80,18 +80,18 @@ rtt_total_weeks_chart <- ggplot(rtt_total_quantiles_summary, aes(x = as.Date(Eff
   geom_label_repel(data = rtt_total_quantiles_summary_latest, aes(label = Percentile_25, y = Percentile_25), nudge_x = 200, show.legend = FALSE, col = palette_wong_regions[5]) +
   geom_label_repel(data = rtt_total_quantiles_summary_latest, aes(label = Percentile_75, y = Percentile_75), nudge_x = 200, show.legend = FALSE, col = palette_wong_regions[5]) +
   geom_label_repel(data = rtt_total_quantiles_summary_latest, aes(label = Percentile_90, y = Percentile_90), nudge_x = 200, show.legend = FALSE, col = palette_wong_regions[2]) +
-  scale_x_date(date_breaks = c("12 months"), date_labels = "%b - %y") +
+  scale_x_date(breaks = seq(as.Date("2011-04-01"), as.Date("2024-04-01"), by = "1 year"), date_labels = "%b - %y", expand = c(0,0)) +
   scale_y_continuous(expand = c(0,0)) + 
   geom_hline(yintercept = 18, linetype = "dashed") +
   annotate(geom = "label",
            x = as.Date("2012-01-01"),
-           y = 20,
+           y = 18,
            label = "18 Weeks",
-           hjust = 1) + 
+           hjust = -1) + 
   labs(x = "Month Ending",
        y = "Weeks Waiting",
        caption = "Source: Monthly RTT Published Data",
-       title = "Summary of Weeks Waiting at Month End - Incomplete RTT Pathways",
+       title = "Summary of Weeks Waiting at Month End",
        subtitle = "All England") +
   selected_theme(hex_col = palette_tu[1])
 
@@ -136,8 +136,8 @@ rtt_waiting_list_shape_prop_chart <- ggplot(rtt_wls, aes(x = weeks_int, y = Inco
   labs(x = "Weeks Waiting",
        y = "Percentage of Incomplete Pathways",
        caption = "Source: Monthly RTT Published Data",
-       title = "Shape of RTT Incomplete Waiting List at Month End - Pre-Pandemic and Latest Month",
-       subtitle = "All England") +
+       title = "Shape of RTT Incomplete Waiting List at Month End",
+       subtitle = "All England - Pre-Pandemic and Latest Month") +
   selected_theme(hex_col = palette_tu[1])
 
 rtt_waiting_list_shape_prop_chart
