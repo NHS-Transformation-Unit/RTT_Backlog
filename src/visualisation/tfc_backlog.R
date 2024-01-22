@@ -10,19 +10,43 @@ rtt_tfc_total_chart_df <- rtt_tfc %>%
 rtt_tfc_total_chart <- 
   ggplot(data = rtt_tfc_total_chart_df, aes(x = as.Date(Effective_Snapshot_Date), y = Incomplete_Pathways)) +
   geom_line(col = "#40C1AC", linewidth = 0.8) +
-  scale_x_date(date_breaks = c("12 months"), date_labels = "%b - %y") +
+  scale_x_date(breaks = seq(as.Date("2011-04-01"), as.Date("2024-04-01"), by = "3 year"), date_labels = "%b - %y", expand = c(0,0)) +
   scale_y_continuous(labels = comma, limits = c(0, NA)) +
   geom_vline(xintercept = as.Date("2020-03-01"), linetype = "dashed") +
-  facet_wrap(~Treatment_Function_Desc, scales = "free", ncol = 4) +
+  facet_wrap(~Treatment_Function_Desc, scales = "free_y", ncol = 4) +
   labs(x = "Month Ending",
        y = "Incomplete Pathways",
        caption = "Source: Monthly RTT Published Data",
        title = "Total Incomplete Pathways by Treatment Function",
        subtitle = "All England") +
-  selected_theme(hex_col = "#40C1AC")
+  theme_tu_white_mf(hex_col = "#40C1AC")
 
 rtt_tfc_total_chart
 
+# TFC Total Backlog for Selected Specialties -------------------------------------------------------
+
+rtt_tfc_total_chart_df_select <- rtt_tfc %>%
+  filter(Treatment_Function_Code %in% c("502", "160", "120", "330", "340", "150") | substring(Treatment_Function_Code, 1, 1) == "X") %>%
+  group_by(Effective_Snapshot_Date, Treatment_Function_Desc) %>%
+  summarise(Incomplete_Pathways = sum(Incomplete_Pathways, na.rm = TRUE)) %>%
+  mutate(Treatment_Function_Desc = case_when(Treatment_Function_Desc == "NULL" ~ "Other",
+                                             TRUE ~ Treatment_Function_Desc))
+
+rtt_tfc_total_chart_select <- 
+  ggplot(data = rtt_tfc_total_chart_df_select, aes(x = as.Date(Effective_Snapshot_Date), y = Incomplete_Pathways)) +
+  geom_line(col = "#40C1AC", linewidth = 0.8) +
+  scale_x_date(breaks = seq(as.Date("2011-04-01"), as.Date("2024-04-01"), by = "3 year"), date_labels = "%b - %y", expand = c(0,0)) +
+  scale_y_continuous(labels = comma, limits = c(0, NA)) +
+  geom_vline(xintercept = as.Date("2020-03-01"), linetype = "dashed") +
+  facet_wrap(~Treatment_Function_Desc, scales = "free_y") +
+  labs(x = "Month Ending",
+       y = "Incomplete Pathways",
+       caption = "Source: Monthly RTT Published Data",
+       title = "Total Incomplete Pathways by Treatment Function",
+       subtitle = "All England - Selected Treatment Functions") +
+  selected_theme(hex_col = "#40C1AC")
+
+rtt_tfc_total_chart_select
 
 # TFC Backlog Change ------------------------------------------------------
 
