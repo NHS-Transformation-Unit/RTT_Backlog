@@ -44,7 +44,7 @@ rtt_tfc_total_chart_select <-
        caption = "Source: Monthly RTT Published Data",
        title = "Total Incomplete Pathways by Treatment Function",
        subtitle = "All England - Selected Treatment Functions") +
-  selected_theme(hex_col = "#40C1AC")
+  theme_tu_white_lf(hex_col = "#40C1AC")
 
 rtt_tfc_total_chart_select
 
@@ -126,3 +126,29 @@ rtt_total_weeks_chart_tfc_selected <- ggplot(rtt_total_quantiles_tfc_summary_sel
   theme_tu_white_mf(hex_col = palette_tu[1])
 
 rtt_total_weeks_chart_tfc_selected
+
+
+# TFC ScatterPlot ---------------------------------------------------------
+
+rtt_total_quantiles_tfc_summary_change <- rtt_total_quantiles_tfc_summary %>%
+  filter(Effective_Snapshot_Date == as.Date(c("2020-02-29")) | Effective_Snapshot_Date == max_date) %>%
+  select(c(1,2,5)) %>%
+  spread(Effective_Snapshot_Date, Percentile_50) %>%
+  rename("Pre" = 2, "Recent" = 3) %>%
+  mutate("Median_Diff" = Recent - Pre) %>%
+  inner_join(rtt_tfc_total_comp, by = c("Treatment_Function_Desc"))
+
+
+tfc_scatter_chart <- ggplot(rtt_total_quantiles_tfc_summary_change, aes(x = Median_Diff, y = Change, size = Latest)) + 
+  geom_point(col = palette_tu[4]) +
+  geom_label_repel(aes(label = Treatment_Function_Desc), size = 2.5) +
+  scale_y_continuous(labels = percent) +
+  scale_size_continuous(labels = comma) +
+  labs(x = "Increase in Median Waiting Time (Days)",
+       y = "Increase in Total Waiting List Size (%)",
+       caption = "Source: Monthly RTT Published Data",
+       title = "Changes in Waiting List Size and Waits",
+       subtitle = "All England - Treatment Functions") +
+  selected_theme(hex_col = "#40C1AC")
+
+
