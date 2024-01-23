@@ -180,8 +180,8 @@ rtt_waiting_list_shape_prop_overlap_chart <- ggplot(rtt_wls, aes(x = weeks_int, 
   labs(x = "Weeks Waiting",
        y = "Percentage of Incomplete Pathways",
        caption = "Source: Monthly RTT Published Data",
-       title = "Shape of RTT Incomplete Waiting List at Month End - Pre-Pandemic and Latest Month",
-       subtitle = "All England") +
+       title = "Shape of RTT Incomplete Waiting List at Month End",
+       subtitle = "All England - Pre-Pandemic and Latest Month") +
   selected_theme(hex_col = palette_tu[1])
 
 rtt_waiting_list_shape_prop_overlap_chart
