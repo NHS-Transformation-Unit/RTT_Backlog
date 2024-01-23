@@ -61,12 +61,14 @@ rtt_tfc_total_comp <- rtt_tfc_total_chart_df %>%
 
 rtt_tfc_total_change_chart <- ggplot(rtt_tfc_total_comp, aes(x = reorder(Treatment_Function_Desc, - Change), y = Change)) +
   geom_bar(stat = "identity", fill = "#40C1AC") +
-  geom_text(aes(label = round(Change * 100, 1)), hjust = 1.1, col = "#000000") +
+  geom_text(aes(label = round(Change * 100, 1)), hjust = 1.1, col = "#000000", size = 3) +
   scale_y_continuous(label = percent) +
   labs(x = "Treatment Function",
        y = "Percentage increase (%)",
        caption = "Source: Monthly RTT Published Data",
-       title = "Percentage Increase in Incomplete Pathways since Pre-Pandemic",
-       subtitle = "All England") +
+       title = "Percentage Change in Incomplete Pathways",
+       subtitle = "All England - Change since pre-pandemic") +
   coord_flip() +
   selected_theme(hex_col = "#40C1AC")
+
+rtt_tfc_total_change_chart
