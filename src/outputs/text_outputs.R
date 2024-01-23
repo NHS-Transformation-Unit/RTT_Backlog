@@ -42,3 +42,8 @@ max_52_waiters_text <- rtt_total_long_waiters_post %>%
   filter(Group == "52+") %>%
   filter(Count == max(Count)) %>%
   mutate(max_date = format(Effective_Snapshot_Date, "%B %Y"))
+
+
+# Total England Quantiles -------------------------------------------------
+
+rtt_quantiles_text <- rtt_total_quantiles_summary_latest
