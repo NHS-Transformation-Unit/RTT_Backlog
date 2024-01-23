@@ -11,18 +11,22 @@ body {
 
 h1 {
   color: #407EC9;
+  font-weight: 150;
 }
 
 h2 {
   color: #407EC9;
+  font-weight: 150;
 }
 
 h3 {
   color: #407EC9;
+  font-weight: 100;
 }
 
 h4 {
   color: #407EC9;
+  font-weight: 50
 }
 
 hr {
