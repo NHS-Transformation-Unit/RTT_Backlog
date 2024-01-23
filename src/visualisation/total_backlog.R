@@ -97,6 +97,30 @@ rtt_total_weeks_chart <- ggplot(rtt_total_quantiles_summary, aes(x = as.Date(Eff
 
 rtt_total_weeks_chart
 
+rtt_total_quantiles_region_summary_cleansed <- rtt_total_quantiles_region_summary %>%
+  filter(!Region_Name %in% c("NULL", "UNKNOWN"))
+
+rtt_total_quantiles_region_summary_latest <- rtt_total_quantiles_region_summary %>%
+  filter(Effective_Snapshot_Date == rtt_total_max_date)
+
+rtt_total_weeks_chart_region <- ggplot(rtt_total_quantiles_region_summary_cleansed, aes(x = as.Date(Effective_Snapshot_Date))) +
+  geom_ribbon(aes(ymin = Percentile_10, ymax = Percentile_90, fill = "10th - 90th Percentile Range"), col = "#ffffff", alpha = 0.5, linewidth = 0.2)+
+  geom_ribbon(aes(ymin = Percentile_25, ymax = Percentile_75, fill = "Interquartile Range"), col = "#ffffff", alpha = 0.5, linewidth = 0.2)+
+  geom_line(aes(y = Percentile_50, col = "Median Waiting Time"), linewidth = 0.7) + 
+  scale_color_manual("", values = "black") +
+  scale_fill_manual("", values = c(palette_wong_regions[2], palette_wong_regions[5])) +
+  scale_x_date(breaks = seq(as.Date("2011-04-01"), as.Date("2024-04-01"), by = "2 year"), date_labels = "%b - %y", expand = c(0,0)) +
+  scale_y_continuous(expand = c(0,0)) + 
+  geom_hline(yintercept = 18, linetype = "dashed") +
+  labs(x = "Month Ending",
+       y = "Weeks Waiting",
+       caption = "Source: Monthly RTT Published Data",
+       title = "Summary of Weeks Waiting at Month End",
+       subtitle = "NHS England Region") +
+  facet_wrap(~Region_Name, scales = "free_x", nrow = 2) +
+  theme_tu_white_mf(hex_col = palette_tu[1])
+
+rtt_total_weeks_chart_region
 
 # Waiting List Shape ------------------------------------------------------
 
