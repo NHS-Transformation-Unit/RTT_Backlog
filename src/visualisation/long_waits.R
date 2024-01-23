@@ -49,7 +49,7 @@ rtt_total_long_waits_chart_post
 rtt_total_long_waits_chart_post_line <- ggplot(rtt_total_long_waiters_post, aes(x = as.Date(Effective_Snapshot_Date), y = Count)) +
   geom_line(col = palette_tu[4], linewidth = 1.2) +
   geom_point(data = rtt_total_long_waiters_post_recent, col = palette_tu[4], size = 2) +
-  geom_label_repel(data = rtt_total_long_waiters_post_recent, aes(label = comma(Count)), nudge_x = 90) + 
+  geom_label_repel(data = rtt_total_long_waiters_post_recent, aes(label = comma(Count)), nudge_x = 90, size = 3) + 
   facet_wrap(~Group, scale = "free") +
   scale_x_date(date_breaks = c("4 months"), date_labels = "%b - %y") +
   scale_y_continuous(label = comma) +
