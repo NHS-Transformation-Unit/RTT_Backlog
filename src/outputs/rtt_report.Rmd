@@ -29,7 +29,7 @@ source(paste0(here(), "/src/outputs/text_outputs.R"))
 
 ## Summary
 
-The Elective Waiting List across England has seen unprecedented growth since the start of the COVID-19 pandemic. Patients are waiting longer than ever for their treatment to start. The NHS has focussed on eradicating the longest waiting times with limited success. Currently `r rtt_long_waiters_text[[5,5]]` pathways have been waiting more than a year. This analysis explores how the waiting list has changed since the pandemic. The key findings of the analysis are:
+The Elective Waiting List across England has seen unprecedented growth since the start of the COVID-19 pandemic. Patients are waiting longer than ever for their treatment to start. The NHS has focussed on eradicating the longest waiting times with only limited success. Currently `r rtt_long_waiters_text[[5,5]]` pathways have been waiting more than a year for treatment. This analysis explores how the waiting list has changed since the pandemic. The key findings of the analysis are:
 
 * The waiting list has increased significantly since the stat of the pandemic. This is also reflected in the increase in waiting times.
 * The deterioration in waiting times is prevalent across all NHS England regions.
@@ -108,7 +108,7 @@ rtt_tfc_total_change_chart
 
 <br/>
 
-## Targetting Longest Waiters
+## Targeting Longest Waiters
 Since February 2022 there has been an emphasis on the eradication of waiting times over 52 weeks. Despite a reduction for those over 104 weeks and over 78 weeks, these haven't been eradicated. _Figure 5_ below shows the number of people waiting more than 52+, 65+, 78+ and 104+ weeks since June 2021.
 
 #### Figure 5
@@ -138,7 +138,7 @@ rtt_total_weeks_chart
 ```
 For most of the 2010s the waiting times across England remained stable. There was a median waiting time of 5-6 weeks although this had began to rise before the start of the pandemic. The distribution of waiting times was also reasonably stable. Although both the upper quartile and 90th percentile waiting times had increased in the three years before the pandemic.
 
-At the start of the pandemic there was a sudden and sharp rise in waiting times for patients on an Incomplete Pathway. This was driven by a significant drop in referrals into secondary care during lockdown. Since mid-2020 waiting times continued deteriorate. The median waiting time has now risen to `r rtt_quantiles_text[[1,4]]` weeks. The upper quartile waiting time currently stands at `r rtt_quantiles_text[[1,5]]` weeks and the 90th percentile is at `r rtt_quantiles_text[[1,6]]`.
+At the start of the pandemic there was a sudden and sharp rise in waiting times. This was driven by a significant drop in referrals into secondary care during lockdown. Since mid-2020 waiting times continued deteriorate. The median waiting time has now risen to `r rtt_quantiles_text[[1,4]]` weeks. The upper quartile waiting time currently stands at `r rtt_quantiles_text[[1,5]]` weeks and the 90th percentile is at `r rtt_quantiles_text[[1,6]]`.
 
 _Figure 7_ shows the changes in the _shape_ of the waiting list. The distribution of current waiting times has a longer tail than pre-pandemic:
 
@@ -148,7 +148,7 @@ rtt_waiting_list_shape_prop_overlap_chart
 
 ```
 
-The same pattern seen nationally can occurs across each of the NHS England regions as shown in _Figure 8_ below:
+This national pattern also occurs across each of the NHS England regions as shown in _Figure 8_ below:
 
 #### Figure 8
 
@@ -196,7 +196,7 @@ The deterioration of elective waiting times are a concern for the NHS as:
 This analysis has been undertaken on publicly available data released by NHS England. The data is published on a monthly basis and is available [here](https://www.england.nhs.uk/statistics/statistical-work-areas/rtt-waiting-times/). The dataset contains the number of Incomplete Pathways for both NHS and Independent providers split by Treatment Function and the number of weeks waited. No adjustments to the data have been made to account for months where there is missing data due to missing or erroneous provider submissions. Whilst NHS England publish [national estimates](https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2024/01/RTT-Overview-Timeseries-Including-Estimates-for-Missing-Trusts-Nov23-XLS-102K-61260.xlsx) to account for missing data, the methodology for this is not available for inclusion here.
 
 ### Methods
-At the NHS Transformation Unit, we are committed to open and transparent analysis. Therefore, this work has been undertaken using the open source programming [R](https://www.r-project.org/about.html) and all of the code to create this analysis is available from our [GitHub Repository](https://github.com/NHS-Transformation-Unit/RTT_Backlog).
+At the NHS Transformation Unit, we are committed to open and transparent analysis. Therefore, this work has been undertaken using the open source programming [R](https://www.r-project.org/about.html). All the code to create this analysis is available from our [GitHub Repository](https://github.com/NHS-Transformation-Unit/RTT_Backlog).
 
 ### Guidance and Further Reading
 The links below contain helpful guidance and further reading relating to RTT standards and performance:
