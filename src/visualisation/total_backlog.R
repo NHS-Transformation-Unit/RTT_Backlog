@@ -41,11 +41,12 @@ rtt_total_region_chart_df_latest <- rtt_total_region_chart_df %>%
   filter(Effective_Snapshot_Date == rtt_total_max_date)
 
 rtt_total_region_chart <- 
-  ggplot(data = rtt_total_region_chart_df, aes(x = as.Date(Effective_Snapshot_Date), y = Incomplete_Pathways, col = Region_Name)) +
+  ggplot(data = rtt_total_region_chart_df, aes(x = as.Date(Effective_Snapshot_Date), y = Incomplete_Pathways, col = Region_Name, linetype = Region_Name)) +
   geom_line() +
   scale_color_manual(values = palette_region, name = "Region") +
+  scale_linetype_manual(values = c("solid", "dashed", "solid", "dashed", "solid", "dashed", "solid"), name = "Region") +
   geom_point(data = rtt_total_region_chart_df_latest, size = 2, show.legend = FALSE) +
-  geom_label_repel(data = rtt_total_region_chart_df_latest, aes(label = comma(Incomplete_Pathways)), nudge_x = 600, show.legend = FALSE, size = 3) +
+  geom_text_repel(data = rtt_total_region_chart_df_latest, aes(label = comma(Incomplete_Pathways)), nudge_x = 600, show.legend = FALSE, size = 2.5) +
   scale_x_date(breaks = seq(as.Date("2011-04-01"), as.Date("2024-04-01"), by = "1 year"), date_labels = "%b - %y", expand = c(0,0)) +
   scale_y_continuous(labels = comma, breaks = c(seq(0, 1500000, by = 250000))) +
   geom_vline(xintercept = as.Date("2020-03-01"), linetype = "dashed") +
@@ -76,8 +77,8 @@ rtt_total_weeks_chart <- ggplot(rtt_total_quantiles_summary, aes(x = as.Date(Eff
   scale_fill_manual("", values = c(palette_wong_regions[2], palette_wong_regions[5])) +
   geom_point(data = rtt_total_quantiles_summary_latest, aes(y = Percentile_50), size = 2, show.legend = FALSE) +
   geom_label_repel(data = rtt_total_quantiles_summary_latest, aes(label = Percentile_50, y = Percentile_50), nudge_x = 200, show.legend = FALSE, col = "black") +
-  geom_label_repel(data = rtt_total_quantiles_summary_latest, aes(label = Percentile_10, y = Percentile_10), nudge_x = 200, show.legend = FALSE, col = palette_wong_regions[2]) +
-  geom_label_repel(data = rtt_total_quantiles_summary_latest, aes(label = Percentile_25, y = Percentile_25), nudge_x = 200, show.legend = FALSE, col = palette_wong_regions[5]) +
+  geom_label_repel(data = rtt_total_quantiles_summary_latest, aes(label = Percentile_10, y = Percentile_10), nudge_x = 200, show.legend = FALSE, col = palette_wong_regions[2], nudge_y = -1) +
+  geom_label_repel(data = rtt_total_quantiles_summary_latest, aes(label = Percentile_25, y = Percentile_25), nudge_x = 200, show.legend = FALSE, col = palette_wong_regions[5], nudge_y = 1) +
   geom_label_repel(data = rtt_total_quantiles_summary_latest, aes(label = Percentile_75, y = Percentile_75), nudge_x = 200, show.legend = FALSE, col = palette_wong_regions[5]) +
   geom_label_repel(data = rtt_total_quantiles_summary_latest, aes(label = Percentile_90, y = Percentile_90), nudge_x = 200, show.legend = FALSE, col = palette_wong_regions[2]) +
   scale_x_date(breaks = seq(as.Date("2011-04-01"), as.Date("2024-04-01"), by = "1 year"), date_labels = "%b - %y", expand = c(0,0)) +
@@ -121,6 +122,19 @@ rtt_total_weeks_chart_region <- ggplot(rtt_total_quantiles_region_summary_cleans
   theme_tu_white_mf(hex_col = palette_tu[1])
 
 rtt_total_weeks_chart_region
+
+rtt_total_weeks_latest_table <- rtt_total_quantiles_region_summary_latest %>%
+  ungroup() %>%
+  select(c(-2)) %>%
+  rename("Region" = 1,
+         "10th Percentile" = 2,
+         "Lower Quartile" = 3,
+         "Median" = 4,
+         "Upper Quartile" = 5,
+         "90th Percentile" = 6) %>%
+  kable(format = "html", align = "lrrrrr") %>%
+  kable_styling() %>%
+  row_spec(0, background = palette_tu[1], color = "white")
 
 # Waiting List Shape ------------------------------------------------------
 
@@ -166,7 +180,7 @@ rtt_waiting_list_shape_prop_chart <- ggplot(rtt_wls, aes(x = weeks_int, y = Inco
 
 rtt_waiting_list_shape_prop_chart
 
-rtt_waiting_list_shape_prop_overlap_chart <- ggplot(rtt_wls, aes(x = weeks_int, y = Incomplete_Pathways_Prop, fill = factor(Effective_Snapshot_Date))) +
+rtt_waiting_list_shape_prop_overlap_chart <- ggplot(rtt_wls, aes(x = weeks_int, y = Incomplete_Pathways_Prop, fill = factor(format(Effective_Snapshot_Date, "%B - %Y")))) +
   geom_area(stat = "identity", position = "identity", col = "white", alpha = 0.5) +
   scale_fill_manual(values = c(palette_wong_regions[1], palette_wong_regions[5]), name = "Month Ending") +
   scale_y_continuous(label = percent, expand = c(0,0)) +
