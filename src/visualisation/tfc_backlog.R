@@ -26,7 +26,7 @@ rtt_tfc_total_chart
 # TFC Total Backlog for Selected Specialties -------------------------------------------------------
 
 rtt_tfc_total_chart_df_select <- rtt_tfc %>%
-  filter(Treatment_Function_Code %in% c("502", "160", "120", "330", "340", "150") | substring(Treatment_Function_Code, 1, 1) == "X") %>%
+  filter(Treatment_Function_Code %in% c("502", "160", "120", "330", "340", "150")) %>%
   group_by(Effective_Snapshot_Date, Treatment_Function_Desc) %>%
   summarise(Incomplete_Pathways = sum(Incomplete_Pathways, na.rm = TRUE)) %>%
   mutate(Treatment_Function_Desc = case_when(Treatment_Function_Desc == "NULL" ~ "Other",
@@ -38,7 +38,7 @@ rtt_tfc_total_chart_select <-
   scale_x_date(breaks = seq(as.Date("2011-04-01"), as.Date("2024-04-01"), by = "3 year"), date_labels = "%b - %y", expand = c(0,0)) +
   scale_y_continuous(labels = comma, limits = c(0, NA)) +
   geom_vline(xintercept = as.Date("2020-03-01"), linetype = "dashed") +
-  facet_wrap(~Treatment_Function_Desc, scales = "free_y") +
+  facet_wrap(~Treatment_Function_Desc, scales = "free") +
   labs(x = "Month Ending",
        y = "Incomplete Pathways",
        caption = "Source: Monthly RTT Published Data",
@@ -47,6 +47,33 @@ rtt_tfc_total_chart_select <-
   theme_tu_white_lf(hex_col = "#40C1AC")
 
 rtt_tfc_total_chart_select
+
+# TFC Total Backlog for Selected Specialties -------------------------------------------------------
+
+rtt_tfc_total_chart_df_select_index_factors <- rtt_tfc_total_chart_df_select %>%
+  filter(Effective_Snapshot_Date == as.Date("2020-02-29")) %>%
+  mutate(Index_PC = Incomplete_Pathways) %>%
+  select(c(2,4))
+
+rtt_tfc_total_chart_df_select_index <- rtt_tfc_total_chart_df_select %>%
+  left_join(rtt_tfc_total_chart_df_select_index_factors, by = "Treatment_Function_Desc") %>%
+  mutate(Index = Incomplete_Pathways/Index_PC)
+
+rtt_tfc_total_chart_select_index <- 
+  ggplot(data = rtt_tfc_total_chart_df_select_index, aes(x = as.Date(Effective_Snapshot_Date.x), y = Index)) +
+  geom_line(col = "#40C1AC", linewidth = 0.8) +
+  scale_x_date(breaks = seq(as.Date("2011-04-01"), as.Date("2024-04-01"), by = "3 year"), date_labels = "%b - %y", expand = c(0,0)) +
+  scale_y_continuous(labels = comma, limits = c(0, NA)) +
+  geom_vline(xintercept = as.Date("2020-03-01"), linetype = "dashed") +
+  facet_wrap(~Treatment_Function_Desc, scales = "free_x") +
+  labs(x = "Month Ending",
+       y = "Relative Index - February 2020",
+       caption = "Source: Monthly RTT Published Data",
+       title = "Change in Incomplete Pathways by Treatment Function",
+       subtitle = "All England - Selected Treatment Functions") +
+  theme_tu_white_lf(hex_col = "#40C1AC")
+
+rtt_tfc_total_chart_select_index
 
 # TFC Backlog Change ------------------------------------------------------
 
@@ -62,7 +89,7 @@ rtt_tfc_total_comp <- rtt_tfc_total_chart_df %>%
 rtt_tfc_total_change_chart <- ggplot(rtt_tfc_total_comp, aes(y = reorder(Treatment_Function_Desc, - Change), x = Change)) +
   geom_bar(stat = "identity", fill = "#40C1AC") +
   geom_text(aes(label = round(Change * 100, 1)), hjust = 1.1, col = "#000000", size = 3) +
-  scale_x_continuous(label = percent) +
+  scale_x_continuous(label = percent, breaks = seq(0, 1, by = 0.25)) +
   labs(y = "Treatment Function",
        x = "Percentage increase (%)",
        caption = "Source: Monthly RTT Published Data",
@@ -127,6 +154,19 @@ rtt_total_weeks_chart_tfc_selected <- ggplot(rtt_total_quantiles_tfc_summary_sel
 
 rtt_total_weeks_chart_tfc_selected
 
+rtt_total_weeks_latest_tfc_table <- rtt_total_quantiles_tfc_summary_latest_selected %>%
+  ungroup() %>%
+  select(c(-2)) %>%
+  rename("Treatment Function" = 1,
+         "10th Percentile" = 2,
+         "Lower Quartile" = 3,
+         "Median" = 4,
+         "Upper Quartile" = 5,
+         "90th Percentile" = 6) %>%
+  kable(format = "html", align = "lrrrrr") %>%
+  kable_styling() %>%
+  row_spec(0, background = palette_tu[1], color = "white")
+
 
 # TFC ScatterPlot ---------------------------------------------------------
 
@@ -140,10 +180,11 @@ rtt_total_quantiles_tfc_summary_change <- rtt_total_quantiles_tfc_summary %>%
 
 
 tfc_scatter_chart <- ggplot(rtt_total_quantiles_tfc_summary_change, aes(x = Median_Diff, y = Change, size = Latest)) + 
-  geom_point(col = palette_tu[1]) +
-  geom_text_repel(aes(label = Treatment_Function_Desc), size = 2.5) +
+  geom_point(col = palette_tu[1], alpha = 0.7) +
+  geom_point(col = "#000000", pch = 21, stroke = 1.5) +
+  geom_text_repel(aes(label = Treatment_Function_Desc), size = 2.3, point.padding = 8) +
   scale_y_continuous(labels = percent) +
-  scale_x_continuous(limits = c(0,12), expand = c(0,0), breaks = seq(0, 12, 2)) +
+  scale_x_continuous(limits = c(2,12), expand = c(0,0), breaks = seq(2, 12, 2)) +
   scale_size_continuous(labels = comma) +
   labs(x = "Increase in Median Waiting Time (Days)",
        y = "Increase in Total Waiting List Size (%)",
@@ -151,3 +192,5 @@ tfc_scatter_chart <- ggplot(rtt_total_quantiles_tfc_summary_change, aes(x = Medi
        title = "Changes in Waiting List Size and Waits",
        subtitle = "All England - Treatment Functions") +
   selected_theme(hex_col = "#40C1AC")
+
+tfc_scatter_chart
