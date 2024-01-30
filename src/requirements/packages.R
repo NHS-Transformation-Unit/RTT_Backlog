@@ -6,6 +6,7 @@ packages <- c("here",
               "knitr",
               "scales",
               "ggrepel",
-              "gganimate")
+              "gganimate",
+              "kableExtra")
 
 lapply(packages, library, character.only=TRUE)
