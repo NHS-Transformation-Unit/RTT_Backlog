@@ -1,0 +1,243 @@
+---
+title: "Referral to Treatment Times - Backlog Analysis"
+author: "Andy Wilson - NHS Transformation Unit"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output:
+ html_document:
+    toc: true
+    toc_depth: 2
+    toc_float: true
+    toc_collapsed: true
+    css: ../config/nhs_tu_theme.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, out.width = '100%')
+library(here)
+
+source(paste0(here(), "/src/requirements/packages.R"))
+source(paste0(here(), "/src/config/palette.R"))
+source(paste0(here(), "/src/config/tu_ggplot_themes.R"))
+source(paste0(here(), "/src/processing/load.R"))
+source(paste0(here(), "/src/processing/features.R"))
+source(paste0(here(), "/src/visualisation/total_backlog.R"))
+source(paste0(here(), "/src/visualisation/long_waits.R"))
+source(paste0(here(), "/src/visualisation/tfc_backlog.R"))
+source(paste0(here(), "/src/outputs/text_outputs.R"))
+
+```
+
+## Summary
+
+The Elective Waiting List across England has seen unprecedented growth since the start of the COVID-19 pandemic. Patients are waiting longer than ever for their treatment to start. The NHS has focussed on eradicating the longest waiting times with only limited success. Currently `r rtt_long_waiters_text[[5,5]]` pathways have been waiting more than a year for treatment. This analysis explores how the waiting list has changed since the pandemic. The key findings of the analysis are:
+
+* The waiting list has increased significantly since the start of the pandemic. This is also reflected in the increase in waiting times.
+* The deterioration in waiting times is prevalent across all NHS England regions.
+* National ambitions to eradicate long waiters has seen only a limited success.
+* Gynaecology, ENT and Oral Surgery have seen the greatest deterioration in waiting times.
+
+<br/>
+
+## Introduction
+***
+
+### Background to Referral to Treatment Waiting Times
+The Referral to Treatment (RTT) standard forms a key component of the [NHS Constitution](https://www.gov.uk/government/publications/the-nhs-constitution-for-england). This states that patients _"have the right to access certain services commissioned by NHS bodies within maximum waiting times, or for the NHS to take all reasonable steps to offer a range of suitable alternative providers if this is not possible"_. The maximum waiting times for elective care are **18 weeks from referral to their treatment**. 
+
+NHS England publishes [monthly data](https://www.england.nhs.uk/statistics/statistical-work-areas/rtt-waiting-times/) on the numbers of patients commencing treatment and how long they waited. Additionally, figures on the number of patients who are still waiting for their treatment to start and how long they have been waiting are published. These pathways are referred to as **Incomplete Pathways**. The total number of these are also referred to as the _"size of the waiting list"_ or _"the RTT backlog"_. This is a helpful indicator of the capacity to deliver Elective care across England. The national target is that 92% of these Incomplete Pathways should be waiting less than 18 weeks since their referral.
+
+### Impact of COVID-19 on Delivery of Elective Care
+To help free as much acute bed capacity across NHS hospitals at the start of the [COVID-19 pandemic](https://www.england.nhs.uk/coronavirus/wp-content/uploads/sites/52/2020/03/urgent-next-steps-on-nhs-response-to-covid-19-letter-simon-stevens.pdf) there was a pause in non-urgent Elective activity. This resulted in a significant increase in the size of the RTT waiting list. As the immediate pressures of coping with the pandemic eased, NHS England has prioritised reducing the number of long waiters. They published their **[Delivery plan for tackling the COVID-19 backlog of elective care](https://www.england.nhs.uk/coronavirus/wp-content/uploads/sites/52/2022/02/C1466-delivery-plan-for-tackling-the-covid-19-backlog-of-elective-care.pdf)** in February 2022. These include the ambitions:
+
+* No patients waiting longer than two years (104 weeks) by July 2022
+* No patients waiting longer than 18 months (78 weeks) by April 2023
+* No patients waiting longer than one year (52 weeks) by March 2025
+
+### Aims of this analysis?
+The analysis will explore:
+
+* How the size of the waiting list has changed since the pandemic.
+* How waiting times have changed since the pandemic.
+* Understand if these changes are similar across the country.
+* Identify which Treatment Functions are most challenged.
+* Understand if the ambitions set out for elective recovery are being met.
+
+<br/>
+
+## What's happened to the size of the Waiting List?
+***
+
+*Figure 1* below shows the size of the Incomplete Waiting list across all providers in England from April 2011 to `r recent_date`.
+
+#### Figure 1
+
+```{r rtt_total_eng, out.height='60%', dpi = 1000}
+
+rtt_total_chart
+
+```
+
+There was a steady increase in the waiting list across England up to the start of the pandemic. The waiting list rose from `r rtt_total_text[[1,4]]` million pathways in `r format(rtt_total_text[[1,1]], "%B %Y")` to  `r rtt_total_text[[2,4]]` million by `r format(rtt_total_text[[2,1]], "%B %Y")`. There was an initial drop in the size of the waiting list at the start of the pandemic. This was due to fewer referrals from Primary Care as a result of pandemic restrictions. After the first lockdown the waiting list grew rapidly. The waiting list currently sits at `r rtt_total_text[[3,4]]` million by `r format(rtt_total_text[[3,1]], "%B %Y")`. This growth has taken place across all regions of the country as shown below in _Figure 2_:
+
+#### Figure 2
+
+```{r rtt_total_reg, dpi = 1000}
+
+rtt_total_region_chart
+
+```
+Looking at *Treatment Functions* demonstrates that almost all services have seen an increase in the backlog since the pandemic. However, there is considerable difference in the scale of this increase. _Figure 3_ shows the number of Incomplete Pathways for the six services with the highest rate of growth since the start of the pandemic:
+
+
+In this option we show the change in the total number of Incomplete Pathways with each scale being unique to the Treatment Function
+
+#### Figure 3 - Option 1
+
+```{r rtt_tfc_backlog, dpi = 1000, out.height = '150%'}
+
+rtt_tfc_total_chart_select
+
+```
+
+
+In this option we show the change in the relative number of Incomplete Pathways for each Treatment Function relative to February 2020 (pre-COVID)
+
+#### Figure 3 - Option 2
+
+```{r rtt_tfc_backlog_index, dpi = 1000, out.height = '150%'}
+
+rtt_tfc_total_chart_select_index
+
+```
+
+We can see these significant increases across many Treatment Functions. `r tfc_text_1` has increased by `r tfc_text_perc_1` since February 2020 and `r tfc_text_2` saw a `r tfc_text_perc_2` increase. _Figure 4_ shows the percentage increase for all Treatment Functions.
+
+#### Figure 4
+
+```{r rtt_tfc_backlog_change, dpi = 1000}
+
+rtt_tfc_total_change_chart
+
+```
+
+
+<br/>
+
+## Targeting Longest Waiters
+***
+Since February 2022 there has been an emphasis on the eradication of waiting times over 52 weeks. Despite a reduction for those over 104 weeks and over 78 weeks, these haven't been eradicated. _Figure 5_ below shows the number of people waiting more than 52+, 65+, 78+ and 104+ weeks since June 2021.
+
+#### Figure 5
+
+```{r rtt_long_waits_vol, dpi = 1000}
+
+rtt_total_long_waits_chart_post_line
+
+```
+There has been a major reduction in the number of 104+ week waiters from a peak off `r max_waiters_text[[4,3]]` to `r rtt_long_waiters_text[[8,5]]`. Whilst the 104+ week waiters were not eradicated in line with ambition of July 2022 the current position of `r rtt_long_waiters_text[[8,5]]` is suggestive of only a small number of complex pathways remaining. Similarly, for 78+ week waiters there has been a reduction from a peak of `r max_waiters_text[[3,3]]` to `r rtt_long_waiters_text[[7,5]]`. Although this reduction has plateaued since April 2023. The ambition of eradicating these long waits by April 2023 has not been achieved. The number of 52+ week waiters continued to grow to a peak of `r max_waiters_text[[1,3]]` in `r max_52_waiters_text[[1,5]]`. Although there has been a reduction with the latest position at `r rtt_long_waiters_text[[5,5]]`. Despite this, the eradication of 52+ week waiting times by March 2025 does not appear to be achievable.
+
+<br/>
+
+## Deteriorating Waiting Times - Shape of the Waiting List
+***
+
+Eliminating the longest waiting times are important for both patient experience and clinical outcomes. Studies have identified delays in treatment are associated with [reduced health gain](https://onlinelibrary.wiley.com/doi/abs/10.1002/hec.3195) from hip and knee replacement and increased [dependence on opiates and depression](https://boneandjoint.org.uk/Article/10.1302/0301-620X.105B7.BJJ-2023-0078.R1).
+
+However, this can’t be the sole focus in attempting to recover and stabilise elective waiting lists across England. Focussing on thresholds can also mask important changes in how long patients are having to wait for treatment. Looking at the changes to the shape of the waiting list provides a greater insight.
+
+_Figure 6_ below shows the median time for each incomplete pathway at the end of each month going back to April 2011. The interquartile range and the range of the 10th to 90th percentiles are overlaid.
+
+#### Figure 6
+
+```{r rtt_total_wait_summary, dpi = 1000}
+
+rtt_total_weeks_chart
+
+```
+For most of the 2010s the waiting times across England remained stable. There was a median waiting time of 5-6 weeks although this had began to rise before the start of the pandemic. The distribution of waiting times was also reasonably stable. Although both the upper quartile and 90th percentile waiting times had increased in the three years before the pandemic.
+
+At the start of the pandemic there was a sudden and sharp rise in waiting times. This was driven by a significant drop in referrals into secondary care during lockdown. Since mid-2020 waiting times continued deteriorate. The median waiting time has now risen to `r rtt_quantiles_text[[1,4]]` weeks. The upper quartile waiting time currently stands at `r rtt_quantiles_text[[1,5]]` weeks and the 90th percentile is at `r rtt_quantiles_text[[1,6]]`.
+
+_Figure 7_ shows the changes in the _shape_ of the waiting list. The distribution of current waiting times has a longer tail than pre-pandemic:
+
+#### Figure 7
+
+```{r rtt_shape_comp, dpi = 1000}
+
+rtt_waiting_list_shape_prop_overlap_chart
+
+```
+
+This national pattern also occurs across each of the NHS England regions as shown in _Figure 8_ below:
+
+#### Figure 8
+
+```{r rtt_total_wait_summary_region, dpi = 1000, fig.height = 5}
+
+rtt_total_weeks_chart_region
+
+```
+
+The latest figures are provided in the table below:
+```{r rtt_total_wait_summary_region_table, dpi = 1000}
+
+rtt_total_weeks_latest_table
+
+```
+
+Increasing waiting times are seen across all Treatment Functions. This is particularly evident for surgical services such as the ones shown in _Figure 9_ below:
+
+#### Figure 9
+
+```{r rtt_total_wait_summary_tfc, dpi = 1000, fig.height = 5}
+
+rtt_total_weeks_chart_tfc_selected
+
+```
+
+The latest figures are provided in the table below:
+```{r rtt_total_wait_summary_tfc_table, dpi = 1000}
+
+rtt_total_weeks_latest_tfc_table
+
+```
+
+_Figure 10_ below shows each Treatment Function comparing their increase in median waiting times with the percentage increase in their waiting list size. This size of each Treatment Function represents the size of the current waiting list. This helps to identify the services with the greatest challenges to Elective recovery. Gynaecology, ENT and Oral Surgery have all seen larger increases to both waiting times and waiting list size.
+
+#### Figure 10
+
+```{r rtt_tfc_scatter, dpi = 1000, fig.height=6}
+
+tfc_scatter_chart
+
+```
+
+<br/>
+
+## Conclusions
+***
+
+The deterioration of elective waiting times are a concern for the NHS as:
+
+* Longer waiting times are associated with reduced clinical outcomes and worse patient experience.
+* The ambition to eradicate the longest waiting times has not been achieved. The focus on long waiters risks masking concerning changes to the shape of the waiting list.
+* The Waiting List is in a much more precarious position than before the pandemic. Future challenges to the delivery of Elective care will likely result in greater increase to waiting times.
+* Services such as Gynaecology, ENT and Oral Surgery have a substantial challenge to recover the waiting list to pre-pandemic levels.
+
+<br/>
+
+## Datasets and Methods
+***
+
+### Dataset
+This analysis has been undertaken on publicly available data released by NHS England. The data is published on a monthly basis and is available [here](https://www.england.nhs.uk/statistics/statistical-work-areas/rtt-waiting-times/). The dataset contains the number of Incomplete Pathways for both NHS and Independent providers split by Treatment Function and the number of weeks waited. No adjustments to the data have been made to account for months where there is missing data due to missing or erroneous provider submissions. Whilst NHS England publish [national estimates](https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2024/01/RTT-Overview-Timeseries-Including-Estimates-for-Missing-Trusts-Nov23-XLS-102K-61260.xlsx) to account for missing data, the methodology for this is not available for inclusion here.
+
+### Methods
+At the NHS Transformation Unit, we are committed to open and transparent analysis. Therefore, this work has been undertaken using the open source programming [R](https://www.r-project.org/about.html). All the code to create this analysis is available from our [GitHub Repository](https://github.com/NHS-Transformation-Unit/RTT_Backlog).
+
+### Guidance and Further Reading
+The links below contain helpful guidance and further reading relating to RTT standards and performance:
+
+* __RTT Guidance__: Guidance published by NHS England relating to the standards and interpretation of RTT rules is available [here](https://www.england.nhs.uk/rtt/).
+* __RTT Published Data__: Data relating to performance against RTT waiting standards is available [here](https://www.england.nhs.uk/statistics/statistical-work-areas/rtt-waiting-times/).
+* __The NHS waiting list: when will it peak?__: Analysis by the Health Foundation on exploring when the RTT Waiting List may peak can be read [here](https://www.health.org.uk/waiting-list).
