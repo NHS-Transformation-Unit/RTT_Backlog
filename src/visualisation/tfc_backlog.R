@@ -34,7 +34,7 @@ rtt_tfc_total_chart_df_select <- rtt_tfc %>%
 
 rtt_tfc_total_chart_select <- 
   ggplot(data = rtt_tfc_total_chart_df_select, aes(x = as.Date(Effective_Snapshot_Date), y = Incomplete_Pathways)) +
-  geom_line(col = "#40C1AC", linewidth = 0.8) +
+  geom_line(col = palette_tu[5], linewidth = 0.8) +
   scale_x_date(breaks = seq(as.Date("2011-04-01"), as.Date("2024-04-01"), by = "3 year"), date_labels = "%b - %y", expand = c(0,0)) +
   scale_y_continuous(labels = comma, limits = c(0, NA)) +
   geom_vline(xintercept = as.Date("2020-03-01"), linetype = "dashed") +
@@ -86,10 +86,11 @@ rtt_tfc_total_comp <- rtt_tfc_total_chart_df %>%
   mutate(Change = (Latest/`Pre-COVID`) - 1) %>%
   arrange(desc(Change))
 
-rtt_tfc_total_change_chart <- ggplot(rtt_tfc_total_comp, aes(y = reorder(Treatment_Function_Desc, - Change), x = Change)) +
-  geom_bar(stat = "identity", fill = "#40C1AC") +
-  geom_text(aes(label = round(Change * 100, 1)), hjust = 1.1, col = "#000000", size = 3) +
+rtt_tfc_total_change_chart <- ggplot(rtt_tfc_total_comp, aes(y = reorder(Treatment_Function_Desc, - Change), x = Change, fill = Change)) +
+  geom_bar(stat = "identity", show.legend = FALSE) +
+  geom_text(aes(label = round(Change * 100, 1)), hjust = -0.1, col = "#000000", size = 2.2) +
   scale_x_continuous(label = percent, breaks = seq(0, 1, by = 0.25)) +
+  scale_fill_gradient(high = palette_tu[5], low = "#fdeee1") +
   labs(y = "Treatment Function",
        x = "Percentage increase (%)",
        caption = "Source: Monthly RTT Published Data",
@@ -180,7 +181,7 @@ rtt_total_quantiles_tfc_summary_change <- rtt_total_quantiles_tfc_summary %>%
 
 
 tfc_scatter_chart <- ggplot(rtt_total_quantiles_tfc_summary_change, aes(x = Median_Diff, y = Change, size = Latest)) + 
-  geom_point(col = palette_tu[1], alpha = 0.7) +
+  geom_point(col = palette_tu[5], alpha = 0.7) +
   geom_point(col = "#000000", pch = 21, stroke = 1.5) +
   geom_text_repel(aes(label = Treatment_Function_Desc), size = 2.3, point.padding = 8) +
   scale_y_continuous(labels = percent) +
