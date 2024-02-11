@@ -26,7 +26,7 @@ rtt_tfc_total_chart
 # TFC Total Backlog for Selected Specialties -------------------------------------------------------
 
 rtt_tfc_total_chart_df_select <- rtt_tfc %>%
-  filter(Treatment_Function_Code %in% c("502", "160", "120", "330", "340", "150")) %>%
+  filter(Treatment_Function_Code %in% c("502", "160", "120", "330", "340", "140")) %>%
   group_by(Effective_Snapshot_Date, Treatment_Function_Desc) %>%
   summarise(Incomplete_Pathways = sum(Incomplete_Pathways, na.rm = TRUE)) %>%
   mutate(Treatment_Function_Desc = case_when(Treatment_Function_Desc == "NULL" ~ "Other",
@@ -185,7 +185,7 @@ tfc_scatter_chart <- ggplot(rtt_total_quantiles_tfc_summary_change, aes(x = Medi
   geom_point(col = "#000000", pch = 21, stroke = 1.5) +
   geom_text_repel(aes(label = Treatment_Function_Desc), size = 2.3, point.padding = 8) +
   scale_y_continuous(labels = percent) +
-  scale_x_continuous(limits = c(2,12), expand = c(0,0), breaks = seq(2, 12, 2)) +
+  scale_x_continuous(limits = c(2,14), expand = c(0,0), breaks = seq(2, 14, 2)) +
   scale_size_continuous(labels = comma) +
   labs(x = "Increase in Median Waiting Time (Days)",
        y = "Increase in Total Waiting List Size (%)",
